@@ -1,0 +1,1 @@
+alias rachel-commit='git -c user.name="Rachel Gardner" -c user.email="rachelgardner9@gmail.com" commit'
