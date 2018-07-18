@@ -29,6 +29,8 @@
 (global-set-key (kbd "C-t") nil) ;; Remove twiddle
 (global-set-key (kbd "C-t") 'new-shell)
 
+;; Taken from https://www.emacswiki.org/emacs/IndentRigidlyN
+;; (originally by KragenJavierSitaker)
 (defun indent-rigidly-n (n)
   "Indent the region, or otherwise the current line, by N spaces."
   (let* ((use-region (and transient-mark-mode mark-active))
