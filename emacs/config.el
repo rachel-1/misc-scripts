@@ -29,6 +29,26 @@
 (global-set-key (kbd "C-t") nil) ;; Remove twiddle
 (global-set-key (kbd "C-t") 'new-shell)
 
+(defun indent-rigidly-n (n)
+  "Indent the region, or otherwise the current line, by N spaces."
+  (let* ((use-region (and transient-mark-mode mark-active))
+         (rstart (if use-region (region-beginning) (point-at-bol)))
+         (rend   (if use-region (region-end)       (point-at-eol)))
+         (deactivate-mark "irrelevant")) ; avoid deactivating mark
+    (indent-rigidly rstart rend n)))
+(defun indent-rigidly-4 ()
+  "Indent the region, or otherwise the current line, by 4 spaces."
+  (interactive)
+  (indent-rigidly-n 4))
+(defun outdent-rigidly-4 ()
+  "Indent the region, or otherwise the current line, by -4 spaces."
+  (interactive)
+  (indent-rigidly-n -4))
+
+(global-set-key (kbd "C-x TAB") nil)
+(global-set-key (kbd "C-x TAB") 'indent-rigidly-4)
+(global-set-key (kbd "<backtab>") 'outdent-rigidly-4)
+
 (require 'comint)
 (setq comint-password-prompt-regexp
       (concat comint-password-prompt-regexp
