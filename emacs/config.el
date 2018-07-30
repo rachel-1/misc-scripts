@@ -47,10 +47,11 @@
   (interactive)
   (indent-rigidly-n -4))
 
-(global-set-key (kbd "C-x TAB") nil)
-(global-set-key (kbd "C-x TAB") 'indent-rigidly-4)
-(global-set-key (kbd "<backtab>") 'outdent-rigidly-4)
-
+(global-set-key (kbd "C-x <") nil)
+(global-set-key (kbd "C-x >") nil)
+(global-set-key (kbd "C-x <") 'outdent-rigidly-4)
+(global-set-key (kbd "C-x >") 'indent-rigidly-4)
+(setq-default fill-column 80)
 (require 'comint)
 (setq comint-password-prompt-regexp
       (concat comint-password-prompt-regexp
