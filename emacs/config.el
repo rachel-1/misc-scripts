@@ -51,9 +51,16 @@
 (global-set-key (kbd "C-x >") nil)
 (global-set-key (kbd "C-x <") 'outdent-rigidly-4)
 (global-set-key (kbd "C-x >") 'indent-rigidly-4)
+
 (setq-default fill-column 80)
 (require 'comint)
 (setq comint-password-prompt-regexp
       (concat comint-password-prompt-regexp
               "\\|^Password for '.*': \\s *\\'"))
 
+(define-skeleton skel-python-print
+  "Insert a python print statement"
+  "Type name of variable: "
+  "print(\"" str ": \", "str") # TODO - remove debug statement"_)
+
+(global-set-key (kbd "C-x C-p") 'skel-python-print)
