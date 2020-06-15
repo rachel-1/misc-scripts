@@ -3,6 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (tango-dark)))
  '(inhibit-startup-screen t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -52,6 +53,11 @@
 (global-set-key (kbd "C-x <") 'outdent-rigidly-4)
 (global-set-key (kbd "C-x >") 'indent-rigidly-4)
 
+(global-set-key (kbd "M-n")
+                (lambda () (interactive) (forward-line  5)))
+(global-set-key (kbd "M-p")
+                    (lambda () (interactive) (forward-line -5)))
+
 (setq-default fill-column 80)
 (require 'comint)
 (setq comint-password-prompt-regexp
@@ -63,4 +69,22 @@
   "Type name of variable: "
   "print(\"" str ": \", "str") # TODO - remove debug statement"_)
 
-(global-set-key (kbd "C-x C-p") 'skel-python-print)
+
+(define-skeleton skel-c++-print
+  "Insert a C++ print statement"
+  "Type name of variable: "
+  "cout << \"" str ": \" << "str" << endl; // TODO - remove debug statement"_)
+
+;;(global-set-key (kbd "C-x C-p") 'skel-python-print)
+(require 'cc-mode)
+(define-key c++-mode-map (kbd "C-x C-p") 'skel-c++-print)
+
+;;(require 'python-mode)
+;;(define-key python-mode-map (kbd "C-x C-p") 'skel-python-print)
+
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'xcscope)
+(cscope-setup)
+
+(setq-default indent-tabs-mode nil)
+(global-auto-revert-mode t)
