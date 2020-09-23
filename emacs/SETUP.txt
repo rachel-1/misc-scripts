@@ -6,3 +6,10 @@ curl -L https://git.io/epre | sh
 # Link customizations
 cd ~/.emacs.d/personal/preload
 ln -s ~/misc-scripts/config.el config.el
+
+sudo add-apt-repository ppa:git-core/ppa -y
+sudo apt-get update
+sudo apt-get install git -y
+git --version
+
+git commit --reuse-message=HEAD@{1}
