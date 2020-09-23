@@ -61,6 +61,7 @@
 (define-skeleton skel-python-print
   "Insert a python print statement"
   "Type name of variable: "
-  "print(\"" str ": \", "str") # TODO - remove debug statement"_)
+  "print(\"" str ": \", "str") # TODO(rachel0) - remove debug statement"_)
 
 (global-set-key (kbd "C-x C-p") 'skel-python-print)
+
