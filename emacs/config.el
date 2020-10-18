@@ -45,7 +45,7 @@
  ;; If there is more than one, they won't work right.
  )
 
-
+(use-package magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (defun new-shell ()

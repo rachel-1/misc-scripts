@@ -1,0 +1,46 @@
+# A list of system set-up commands I always forget.
+
+* Emacs
+** Install Emacs25 on Ubuntu 16
+sudo add-apt-repository ppa:kelleyk/emacs
+sudo apt update
+sudo apt install emacs25
+sudo add-apt-repository --remove ppa:kelleyk/emacs
+
+** Remove Emacs24
+sudo apt-get remove ^emacs24
+
+** Download Emacs prelude (if desired)
+sudo apt install emacs
+curl -L https://git.io/epre | sh
+
+** Link customizations
+cd ~/.emacs.d/personal/preload
+ln -s ~/misc-scripts/config.el config.el
+
+* Git
+** Create SSH key
+# Create an SSH key
+ssh-keygen -t rsa -b 4096
+
+# Add key to ssh-agent
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+# Test adding the key
+ssh -T git@github.com
+
+** Upgrade git
+sudo add-apt-repository ppa:git-core/ppa -y
+sudo apt-get update
+sudo apt-get install git -y
+git --version
+sudo add-apt-repository --remove ppa:git-core/ppa
+
+** Reuse last git commit message
+git commit --reuse-message=HEAD@{1}
+
+* Conda
+** Create new environment 
+conda create --name py35 python=3.5
+conda env create --file bio-env.txt
