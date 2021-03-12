@@ -40,7 +40,21 @@ sudo add-apt-repository --remove ppa:git-core/ppa
 ** Reuse last git commit message
 git commit --reuse-message=HEAD@{1}
 
+** Checkout submodules
+git submodule update --init --recursive
 * Conda
 ** Create new environment 
 conda create --name py35 python=3.5
 conda env create --file bio-env.txt
+* PyTorch/CUDA
+** Check pytorch version
+python
+import torch
+print(torch.__version__)
+
+* iPython
+%load_ext autoreload
+%autoreload 2
+* CMake
+** Change directory of make install
+export DESTDIR=/some/directory
