@@ -1,10 +1,10 @@
 # A list of system set-up commands I always forget.
 
 * Emacs
-** Install Emacs25 on Ubuntu 16
+** Install Emacs27 on Ubuntu 18
 sudo add-apt-repository ppa:kelleyk/emacs
 sudo apt update
-sudo apt install emacs25
+sudo apt install emacs27
 sudo add-apt-repository --remove ppa:kelleyk/emacs
 
 ** Remove Emacs24
@@ -42,6 +42,8 @@ git commit --reuse-message=HEAD@{1}
 
 ** Checkout submodules
 git submodule update --init --recursive
+** Set email
+git config --global user.email "13966854+rachel-1@users.noreply.github.com"
 * Conda
 ** Create new environment 
 conda create --name py35 python=3.5
@@ -58,3 +60,11 @@ print(torch.__version__)
 * CMake
 ** Change directory of make install
 export DESTDIR=/some/directory
+* rclone
+** Setup Google Drive on Linux
+: sudo apt install rclone
+: rclone config
+** Two-way sync (that is only sketchy if both sides change one file; also doesn't delete files)
+: rclone copy -u src dest && rclone copy -u dest src
+
+

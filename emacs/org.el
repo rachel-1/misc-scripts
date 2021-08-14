@@ -1,65 +1,23 @@
 ;;; Inline tasks
-(require 'org-inlinetask)
+;(require 'org-inlinetask) TODO
 
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(d)" "|" "DONE(f)")
+        (sequence "BLOCKED(b)" "|" "DONE(f)")))
+
+(cond ((eq system-type 'windows-nt)
+       (setq org-directory "c:/Users/rache/Google Drive/Org")
+       )
+      ((eq system-type 'gnu/linux)
+       (setq org-directory "~/org")       
+       )
+      )
+        
 (global-set-key (kbd "C-c c") #'org-capture)
-(setq org-default-notes-file "c:/Users/rache/Google Drive/Org/todo.org")
-
-(setq org-directory "c:/Users/rache/Google Drive/Org")
+(setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))
 
 ;; Set up searching
-(setq deft-directory "c:/Users/rache/Google Drive/Org")
-
-;;; Set up templates
-(setq org-roam-capture-templates
-      '(("d" "default" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n\n"
-         :unnarrowed t)
-        ("i" "introspection" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: introspection\n\n"
-         :unnarrowed t)
-         ("b" "book" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: book\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n"
-         :unnarrowed t)
-         ("t" "task" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: task"
-         :unnarrowed t)
-        ("e" "event" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: event\n\n"
-         :unnarrowed t)
-        ("p" "person" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: person\n\n"
-         :unnarrowed t)
-        ("l" "location" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: location\n\n"
-         :unnarrowed t)
-        ("c" "company" plain
-         (function org-roam-capture--get-point)
-         "%?"
-         :file-name "%<%Y%m%d%H%M%S>-${slug}"
-         :head "#+TITLE: ${title}\n#+roam_tags: company\n\n"
-         :unnarrowed t)
-        ))
+(setq deft-directory org-directory)
 
 ;;; Take screenshots to insert:
 ; https://www.sastibe.de/2018/11/take-screenshots-straight-into-org-files-in-emacs-on-win10/
@@ -139,4 +97,14 @@ same directory as the org-buffer and insert a link to this file."
 (setq org-pomodoro-format "Work~%s")
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 (setq org-pomodoro-manual-break t)
+(setq org-pomodoro-audio-player "mplayer")
+(setq org-pomodoro-finished-sound-args "-volume 0.3")
+(setq org-pomodoro-long-break-sound-args "-volume 0.3")
+(setq org-pomodoro-short-break-sound-args "-volume 0.3")
 (global-set-key (kbd "C-c p") #'org-pomodoro)
+
+;; ; The org-bullets package replaces all headline markers with different Unicode bullets:
+(use-package org-bullets
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+ (setq org-bullets-bullet-list '("◉" "○" "•" "-"))

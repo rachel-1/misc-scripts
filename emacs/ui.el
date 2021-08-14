@@ -28,12 +28,6 @@
 ;; Underline line at descent position, not baseline position
 (setq x-underline-at-descent-line t)
 
-; The org-bullets package replaces all headline markers with different Unicode bullets:
-(use-package org-bullets
-     :config
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-(setq org-bullets-bullet-list '("◉" "○" "•" "-"))
-
 (add-hook 'text-mode-hook
            (lambda ()
             (variable-pitch-mode 1)))

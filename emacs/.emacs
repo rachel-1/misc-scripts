@@ -14,38 +14,15 @@
 
 (load "~/.emacs.d/org.el")
 (load "~/.emacs.d/org-roam.el")
-(load "~/.emacs.d/references.el")
+;(load "~/.emacs.d/references.el")
 (load "~/.emacs.d/autocomplete.el")
+(load "~/.emacs.d/autosave.el")
+(load "~/.emacs.d/spell-checking.el")
+(load "~/.emacs.d/code.el")
+(load "~/.emacs.d/bazel.el")
 (load "~/.emacs.d/ui.el")
 
-;; Spell checking
-(setenv "LANG" "en_US")
-(setq ispell-program-name
-      "C:/Users/rache/bin/hunspell/bin/hunspell.exe")
-(global-set-key (kbd "C-x c") #'helm-flyspell-correct)
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'text-mode-hook 'flyspell-mode)
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-
-;; Auto-save
-; Taken from https://github.com/bbatsov/prelude/commit/f66a56a72edd38518a96cbba88822957275d108c
-(defcustom prelude-auto-save t
-  "Non-nil values enable Prelude's auto save."
-  :type 'boolean
-  :group 'prelude)
-
-(defun prelude-auto-save-command ()
-  (when (and prelude-auto-save
-             buffer-file-name
-             (buffer-modified-p (current-buffer)))
-    (save-buffer)))
-
-(defadvice switch-to-buffer (before save-buffer-now activate)
-  (prelude-auto-save-command))
-(defadvice other-window (before other-window-now activate)
-  (prelude-auto-save-command))
-(defadvice other-frame (before other-frame-now activate)
-  (prelude-auto-save-command))
+(global-set-key (kbd "C-c C-u") #'browse-url-at-point)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -55,13 +32,20 @@
  '(custom-enabled-themes '(poet))
  '(custom-safe-themes
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
- '(org-agenda-files
-   '("c:/Users/rache/Google Drive/Org/process.org" "c:/Users/rache/Google Drive/Org/20210803140910-engineering_notebook.org"))
- '(org-pomodoro-format "Work~%s")
- '(org-pomodoro-keep-killed-pomodoro-time t)
- '(org-pomodoro-manual-break t)
+ '(deft-directory "~/org")
+ '(deft-use-filename-as-title t)
+ '(org-agenda-files '("~/org/process.org" "~/org/onboarding.org"))
  '(package-selected-packages
-   '(helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel)))
+   '(ox-slack magit org-roam helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel))
+ '(safe-local-variable-values
+   '((flycheck-clang-warnings "all" "extra" "no-pragma-once-outside-header")
+     (flycheck-clang-language-standard . "c++17")
+     (flycheck-gcc-language-standard . "c++17")
+     (flycheck-c/c++-clang-executable . "/usr/bin/clang")
+     (c-file-offsets
+      (access-label . -3)
+      (innamespace . 0))
+     (c-default-style "google"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

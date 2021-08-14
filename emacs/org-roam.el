@@ -1,43 +1,73 @@
 ;; Org and Org-roam - https://github.com/nobiot/Zero-to-Emacs-and-Org-roam
 
-;;; Tell Emacs where sqlite3.exe is stored
-(add-to-list 'exec-path "c:/Users/rache/bin/sqlite-tools-win32-x86-3360000")
+;;; Tell Emacs where sqlite3.exe is stored, if using Windows
+(cond ((eq system-type 'windows-nt)
+       (add-to-list 'exec-path "c:/Users/rache/bin/sqlite-tools-win32-x86-3360000")
+       ))
+;; Acknowledge migration to v2.
+(setq org-roam-v2-ack t)
 
 ;;; Pick a new base directory for org roam
-(setq org-roam-directory "c:/Users/rache/Google Drive/Org")
+(setq org-roam-directory org-directory)
 
 ;;; Tell Emacs to start org-roam-mode when Emacs starts
-(add-hook 'after-init-hook 'org-roam-mode)
+(add-hook 'after-init-hook 'org-roam-setup)
 
 ;;; Define key bindings for Org-roam
-(global-set-key (kbd "C-c n r") #'org-roam-buffer-toggle-display)
-(global-set-key (kbd "C-c n i") #'org-roam-insert)
-;(global-set-key (kbd "C-c n /") #'org-roam-find-file)
-(global-set-key (kbd "C-x C-b") #'org-roam-find-file)
-(global-set-key (kbd "C-c n b") #'org-roam-switch-to-buffer)
-(global-set-key (kbd "C-c n d") #'org-roam-find-directory)
+(global-set-key (kbd "C-c n r") #'org-roam-toggle)
+(global-set-key (kbd "C-c n i") #'org-roam-node-insert)
+(global-set-key (kbd "C-x C-b") #'org-roam-node-find)
 
-;;; Recommendation for Windows users for performance
-;;; https://github.com/org-roam/org-roam/issues/1289#issuecomment-744046148
-(setq org-roam-db-update-method 'immediate)
-
+;;; Set up templates
+(setq org-roam-capture-templates
+      '(("d" "default" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n\n")
+         :unnarrowed t)
+        ("i" "introspection" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :introspection:\n")
+         :unnarrowed t)
+        ("b" "book" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :book:\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n")
+         :unnarrowed t)
+        ("t" "task" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :task:\n")
+         :unnarrowed t)
+        ("e" "event" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :event:\n")
+         :unnarrowed t)
+        ("p" "person" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :person:\n")
+         :unnarrowed t)
+        ("l" "location" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :location:\n")
+         :unnarrowed t)
+        ("c" "company" plain "%?"
+         :if-new (file+head "${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :company:\n")
+         :unnarrowed t)
+        ))
 
 ;;; Set up daily notes
 (setq org-roam-dailies-directory "daily/")
 
 (setq org-roam-dailies-capture-templates
     '(("d" "default" entry
-    #'org-roam-capture--get-point
     "* %?"
-    :file-name "daily/%<%Y-%m-%d>"
-    :head "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n* Meetings\n\n* Readings\n\n* Work Log\n#+BEGIN: clocktable :scope agenda :maxlevel 3 :block today :link t :fileskip0 t :hidefiles t :compact t :narrow 100
+    :if-new (file+head "%<%Y-%m-%d>.org"
+                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n* Meetings\n\n* Readings\n\n* Work Log\n#+BEGIN: clocktable :scope agenda :maxlevel 3 :block today :link t :fileskip0 t :hidefiles t :compact t :narrow 100
 #+END:
-\n* Reflections")
+\n* Reflections"))
       ("w" "week" entry
-    #'org-roam-capture--get-point
-    "* %?"
-    :file-name "daily/%<%Y-%m-%d>"
-    :head "#+title: %<%Y-%m-%d>\n#+roam_tags:journal\n* * Checklist
+       "* %?"
+       :if-new (file+head "%<%Y-%m-%d>"
+                          "#+title: %<%Y-%m-%d>\n#+roam_tags:journal\n* * Checklist
 ** Get clear
 *** Process all inbound [0/4]
 - [ ] emails
@@ -66,10 +96,10 @@
 #+END:
 * Reflections
 /What's on my mind? What went well and what didn't? What did I do that will prepare me for my long-term goals?/
-\n* Reflections")
-))
+\n* Reflections"))
+      ))
 
-(global-set-key (kbd "C-c j") #'org-roam-dailies-find-today)
+(global-set-key (kbd "C-c j") #'org-roam-dailies-goto-today)
 
 (defun org-roam-dailies-copy-week-of-entries ()
   "Copy in the previous week of daily notes into a single buffer for easier viewing."
@@ -101,3 +131,30 @@
   )
 
 (global-set-key (kbd "C-c w") #'org-roam-dailies-copy-week-of-entries)
+
+;; Taken from https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2
+(defun org-hide-properties ()
+  "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward
+            "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+      (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov_this 'display "")
+        (overlay-put ov_this 'hidden-prop-drawer t))))
+  (put 'org-toggle-properties-hide-state 'state 'hidden))
+
+(defun org-show-properties ()
+  "Show all org-mode property drawers hidden by org-hide-properties."
+  (interactive)
+  (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
+  (put 'org-toggle-properties-hide-state 'state 'shown))
+
+(defun org-toggle-properties ()
+  "Toggle visibility of property drawers."
+  (interactive)
+  (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+      (org-show-properties)
+    (org-hide-properties)))
+(add-hook 'org-mode-hook 'org-hide-properties)
