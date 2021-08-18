@@ -22,43 +22,50 @@
 (global-set-key (kbd "C-x C-b") #'org-roam-node-find)
 
 ;;; Set up templates
+(make-directory org-directory :parents)
+(make-directory (concat (file-name-as-directory org-directory) "personal") :parents)
+(make-directory (concat (file-name-as-directory org-directory) "aurora") :parents)
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n\n")
          :unnarrowed t)
+        ("a" "aurora confidential" plain "%?"
+         :if-new (file+head "aurora/${slug}.org"
+                            "#+title: ${title}\n#+file_tags: :aurora:\n")
+         :unnarrowed t)
         ("i" "introspection" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :introspection:\n")
          :unnarrowed t)
         ("b" "book" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :book:\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n")
          :unnarrowed t)
         ("t" "task" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :task:\n")
          :unnarrowed t)
         ("e" "event" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :event:\n")
          :unnarrowed t)
         ("p" "person" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :person:\n")
          :unnarrowed t)
         ("l" "location" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :location:\n")
          :unnarrowed t)
         ("c" "company" plain "%?"
-         :if-new (file+head "${slug}.org"
+         :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :company:\n")
          :unnarrowed t)
         ))
 
 ;;; Set up daily notes
-(setq org-roam-dailies-directory "daily/")
+(setq org-roam-dailies-directory "personal/daily/")
 
 (setq org-roam-dailies-capture-templates
     '(("d" "default" entry
