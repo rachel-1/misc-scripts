@@ -64,6 +64,9 @@
 (global-set-key (kbd "C-x <") 'outdent-rigidly-4)
 (global-set-key (kbd "C-x >") 'indent-rigidly-4)
 
+; Make sure TRAMP always uses bash
+(setq explicit-shell-file-name "/bin/bash")
+
 ; Create a new shell, incrementing the number each time.
 (defun new-shell ()
   (interactive)
