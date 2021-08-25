@@ -17,7 +17,18 @@
 (setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))
 
 ;; Set up searching
+(use-package deft)
+(setq deft-extensions '("org"))
 (setq deft-directory org-directory)
+(setq deft-recursive t)
+
+;; Allow copy-paste to Slack
+(use-package ox-slack)
+
+;; Allow quick insertion of certain templates
+(setq org-structure-template-alist
+      '(("b" . "src bash\n")))
+(global-set-key (kbd "C-c ,") 'org-insert-structure-template)
 
 ;;; Take screenshots to insert:
 ; https://www.sastibe.de/2018/11/take-screenshots-straight-into-org-files-in-emacs-on-win10/
@@ -36,7 +47,9 @@ same directory as the org-buffer and insert a link to this file."
   (insert (concat "[[file:" filename "]]"))
   (org-display-inline-images))
 
-(global-set-key "\C-cs" 'my-org-screenshot)
+;(global-set-key "\C-cs" 'my-org-screenshot)
+(use-package org-attach-screenshot)
+(global-set-key (kbd "C-c s") 'org-attach-screenshot)
 
 ; https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 ; Hide /.../ for italics, *...* for bold, etc.
@@ -90,8 +103,7 @@ same directory as the org-buffer and insert a link to this file."
 (global-set-key (kbd "C-c C-o") #'org-open-at-point)
 (global-set-key (kbd "C-o") #'org-peek-link-at-point)
 
-;; Have org-mode prompt to handle idle (i.e. non-Emacs time) properly
-(setq org-clock-idle-time 5)
+(global-set-key (kbd "C-c C-x C-j") 'org-clock-goto)
 
 ;; Set up pomodoro timer
 (setq org-pomodoro-format "Work~%s")
