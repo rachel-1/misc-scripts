@@ -6,7 +6,7 @@
         (sequence "BLOCKED(b)" "|" "DONE(f)")))
 
 (cond ((eq system-type 'windows-nt)
-       (setq org-directory "c:/Users/rache/Google Drive/Org")
+       (setq org-directory "G:/My Drive/Org")
        )
       ((eq system-type 'gnu/linux)
        (setq org-directory "~/org")       
