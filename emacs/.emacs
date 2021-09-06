@@ -12,6 +12,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(load "~/.emacs.d/config/ssh.el")
 (load "~/.emacs.d/config/org.el")
 (load "~/.emacs.d/config/org-roam.el")
 ;(load "~/.emacs.d/config/references.el")
