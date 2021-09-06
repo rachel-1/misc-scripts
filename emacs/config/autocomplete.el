@@ -9,9 +9,9 @@
 
 ;; Add Counsel and Swiper search functions
 (global-set-key (kbd "C-c f r") #'counsel-recentf)
-(global-set-key (kbd "C-c C-s") #'swiper)
 
-;; Replace default "M-x" and "C-x C-f" with Counsel version
+;; Replace defaults with Counsel+Swiper versions
+(global-set-key (kbd "C-s") #'swiper)
 (global-set-key (kbd "M-x") #'counsel-M-x)
 (global-set-key (kbd "C-x C-f") #'counsel-find-file)
 

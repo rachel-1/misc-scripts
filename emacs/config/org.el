@@ -106,6 +106,7 @@ same directory as the org-buffer and insert a link to this file."
 (global-set-key (kbd "C-c C-x C-j") 'org-clock-goto)
 
 ;; Set up pomodoro timer
+(use-package org-pomodoro)
 (setq org-pomodoro-format "Work~%s")
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 (setq org-pomodoro-manual-break t)
@@ -113,7 +114,7 @@ same directory as the org-buffer and insert a link to this file."
 (setq org-pomodoro-finished-sound-args "-volume 0.3")
 (setq org-pomodoro-long-break-sound-args "-volume 0.3")
 (setq org-pomodoro-short-break-sound-args "-volume 0.3")
-(global-set-key (kbd "C-c p") #'org-pomodoro)
+(global-set-key (kbd "C-c C-p") #'org-pomodoro)
 
 ;; ; The org-bullets package replaces all headline markers with different Unicode bullets:
 (use-package org-bullets

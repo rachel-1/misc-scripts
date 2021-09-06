@@ -9,7 +9,7 @@
 (define-skeleton skel-c++-print
   "Insert a C++ print statement"
   "Type name of variable: "
-  "cout << \"" str ": \" << "str" << endl; // TODO(rachel0) - remove debug statement"_)
+  "LOG(INFO) << \"" str ": \" << "str"; // TODO(rachel-1) - remove debug statement"_)
 
 (require 'cc-mode)
 (define-key c++-mode-map (kbd "C-x C-p") 'skel-c++-print)
@@ -25,6 +25,9 @@
 
 ;; Use spaces instead of tabs and list the column number
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq-default fill-column 100)
+(setq indent-line-function 'insert-tab)
 (setq column-number-mode t)
 
 ;; Make sure Emacs buffers change as I switch around on git
@@ -118,3 +121,31 @@
 
 (global-set-key (kbd "<f6>") 're-run-in-shell)
 (global-set-key (kbd "<f7>") 're-run-in-shell-2)
+
+; Make sure programs executed from the shell use the current Emacs as editor.
+; This is most important for Git, which is why `with-editor ships with Magit.
+(add-hook 'shell-mode-hook  'with-editor-export-editor)
+
+; Use projectile for projects.    
+(use-package helm-projectile
+    :config
+    (helm-projectile-on)
+    (projectile-mode +1)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    ;; Add "bazel" project type
+    (projectile-register-project-type
+    'bazel
+    '("WORKSPACE")  ;; identifier file for a bazel project type
+    :compile "bazel build "
+    :test "bazel test "
+    :run "bazel run "
+    :test-prefix "test_"
+    :test-suffix "_test")
+    )
+
+; Support for jump-to-definition
+; By default uses M-. to jump to definition.
+(use-package dumb-jump)
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+; Use a helm wrapper for xref.
+(use-package helm-xref)        
