@@ -46,6 +46,10 @@
          :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :task:\n")
          :unnarrowed t)
+        ("m" "meeting" plain "* ${title} %t\n%?"
+         :if-new (file+head "aurora/meetings.org"
+                            "#+title: ${Aurora Meetings}\n#+file_tags: :aurora:\n")
+         :clock-in t :clock-resume t :kill-buffer t)
         ("e" "event" plain "%?"
          :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :event:\n")
@@ -65,15 +69,13 @@
         ))
 
 ;;; Set up daily notes
-(setq org-roam-dailies-directory "personal/daily/")
+(setq org-roam-dailies-directory "shared/journal/")
 
 (setq org-roam-dailies-capture-templates
     '(("d" "default" entry
     "* %?"
     :if-new (file+head "%<%Y-%m-%d>.org"
-                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n* Meetings\n\n* Readings\n\n* Work Log\n#+BEGIN: clocktable :scope agenda :maxlevel 3 :block today :link t :fileskip0 t :hidefiles t :compact t :narrow 100
-#+END:
-\n* Reflections"))
+                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n\n%?"))
       ("w" "week" entry
        "* %?"
        :if-new (file+head "%<%Y-%m-%d>"

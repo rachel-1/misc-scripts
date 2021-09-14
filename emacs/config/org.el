@@ -24,6 +24,8 @@
 
 ;; Allow copy-paste to Slack
 (use-package ox-slack)
+;; Allow copy-paste to Google Docs
+(use-package ox-clip)
 
 ;; Allow quick insertion of certain templates
 (setq org-structure-template-alist
@@ -115,6 +117,9 @@ same directory as the org-buffer and insert a link to this file."
 (setq org-pomodoro-long-break-sound-args "-volume 0.3")
 (setq org-pomodoro-short-break-sound-args "-volume 0.3")
 (global-set-key (kbd "C-c C-p") #'org-pomodoro)
+
+;; Don't round time durations to days.
+(setq org-duration-format 'h:mm)
 
 ;; ; The org-bullets package replaces all headline markers with different Unicode bullets:
 (use-package org-bullets
