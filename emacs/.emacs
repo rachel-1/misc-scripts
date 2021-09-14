@@ -3,6 +3,7 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
+(package-refresh-contents)
 
 ; Install any necessary packages.
 (unless (package-installed-p 'use-package)
@@ -13,9 +14,9 @@
 (setq use-package-always-ensure t)
 
 (load "~/.emacs.d/config/ssh.el")
-(load "~/.emacs.d/config/org.el")
-(load "~/.emacs.d/config/org-roam.el")
-;(load "~/.emacs.d/config/references.el")
+(if (load "~/.emacs.d/config/org.el")
+    (load "~/.emacs.d/config/org-roam.el"))
+(load "~/.emacs.d/config/references.el")
 (load "~/.emacs.d/config/autocomplete.el")
 (load "~/.emacs.d/config/autosave.el")
 (load "~/.emacs.d/config/spell-checking.el")
@@ -33,11 +34,9 @@
  '(custom-enabled-themes '(poet))
  '(custom-safe-themes
    '("2d035eb93f92384d11f18ed00930e5cc9964281915689fa035719cab71766a15" default))
- '(deft-directory "~/org" t)
  '(deft-use-filename-as-title t)
- '(org-agenda-files '("~/org/process.org" "~/org/onboarding.org"))
  '(package-selected-packages
-   '(org-attach-screenshot ox-slack magit org-roam helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel))
+   '(ox-clip org-attach-screenshot ox-slack magit org-roam helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel))
  '(safe-local-variable-values
    '((flycheck-clang-warnings "all" "extra" "no-pragma-once-outside-header")
      (flycheck-clang-language-standard . "c++17")

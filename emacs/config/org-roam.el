@@ -5,35 +5,53 @@
   (add-to-list 'exec-path "C:/msys64/mingw64/bin")
 ))
 
-(use-package org-roam)
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename (cond ((eq system-type 'windows-nt)
+       (setq org-directory "G:/My Drive/Org")
+       )
+      ((eq system-type 'gnu/linux)
+       (setq org-directory "~/org")       
+       )
+      )
+   ))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-x C-b" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (make-directory org-roam-directory :parents)
+  (make-directory (concat (file-name-as-directory org-roam-directory) "personal") :parents)
+  (make-directory (concat (file-name-as-directory org-roam-directory) "aurora") :parents)
+  (make-directory (concat (file-name-as-directory org-roam-directory) "shared") :parents)
+  (org-roam-db-autosync-mode))
 
 ;; Acknowledge migration to v2.
 (setq org-roam-v2-ack t)
 
-;;; Pick a new base directory for org roam
-(setq org-roam-directory org-directory)
-
-;;; Tell Emacs to start org-roam-mode when Emacs starts
-(add-hook 'after-init-hook 'org-roam-setup)
-
-;;; Define key bindings for Org-roam
-(global-set-key (kbd "C-c n r") #'org-roam-toggle)
-(global-set-key (kbd "C-c n i") #'org-roam-node-insert)
-(global-set-key (kbd "C-x C-b") #'org-roam-node-find)
-
 ;;; Set up templates
-(make-directory org-directory :parents)
-(make-directory (concat (file-name-as-directory org-directory) "personal") :parents)
-(make-directory (concat (file-name-as-directory org-directory) "aurora") :parents)
 (setq org-roam-capture-templates
       '(("d" "default" plain "%?"
          :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n\n")
          :unnarrowed t)
-        ("a" "aurora confidential" plain "%?"
+        ("z" "project" plain "%?"
+         :if-new (file+head "shared/projects/${slug}.org"
+                            "#+title: ${title}\n\n")
+         :unnarrowed t)
+        ("a" "aurora notes" plain "%?"
          :if-new (file+head "aurora/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :aurora:\n")
          :unnarrowed t)
+        ("m" "aurora meeting" plain "* ${title} %t n\n%?"
+         :if-new (file+head "aurora/meetings.org"
+                            "#+title: Aurora Meetings\n#+filetags: :aurora:\n")
+         :clock-in t :clock-resume t :kill-buffer t
+         )        
         ("i" "introspection" plain "%?"
          :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :introspection:\n")
@@ -43,11 +61,15 @@
                             "#+title: ${title}\n#+file_tags: :book:\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n")
          :unnarrowed t)
         ("t" "task" plain "%?"
-         :if-new (file+head "personal/${slug}.org"
+         :if-new (file+head "shared/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :task:\n")
          :unnarrowed t)
+        ("s" "shared" plain "%?"
+         :if-new (file+head "shared/${slug}.org"
+                            "#+title: ${title}\n")
+         :unnarrowed t)
         ("e" "event" plain "%?"
-         :if-new (file+head "personal/${slug}.org"
+         :if-new (file+head "personal/<%<%Y-%m-%d>>_${slug}.org"
                             "#+title: ${title}\n#+file_tags: :event:\n")
          :unnarrowed t)
         ("p" "person" plain "%?"
@@ -62,22 +84,36 @@
          :if-new (file+head "personal/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :company:\n")
          :unnarrowed t)
-        ))
+        ("r" "bibliography reference" plain
+         "- tags ::
+- keywords :: %^{keywords}
+
+* %^{title}
+:PROPERTIES:
+:Custom_ID: %^{citekey}
+:URL: %^{url}
+:AUTHOR: %^{author-or-editor}
+:NOTER_DOCUMENT: %^{file}  
+:NOTER_PAGE:  
+:END:"
+         :if-new
+         (file+head "shared/papers/${citekey}.org" "#+title: ${title}\n")
+         :unnarrowed t)
+        )
+      )
 
 ;;; Set up daily notes
-(setq org-roam-dailies-directory "personal/daily/")
+(setq org-roam-dailies-directory "shared/journal/")
 
 (setq org-roam-dailies-capture-templates
     '(("d" "default" entry
     "* %?"
     :if-new (file+head "%<%Y-%m-%d>.org"
-                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n* Meetings\n\n* Readings\n\n* Work Log\n#+BEGIN: clocktable :scope agenda :maxlevel 3 :block today :link t :fileskip0 t :hidefiles t :compact t :narrow 100
-#+END:
-\n* Reflections"))
+                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n"))
       ("w" "week" entry
        "* %?"
-       :if-new (file+head "%<%Y-%m-%d>"
-                          "#+title: %<%Y-%m-%d>\n#+roam_tags:journal\n* * Checklist
+       :if-new (file+head "Week of %<%Y-%m-%d>.org"
+                          "#+title: Week of %<%Y-%m-%d>\n#+roam_tags:journal\n* Checklist
 ** Get clear
 *** Process all inbound [0/4]
 - [ ] emails
@@ -101,12 +137,9 @@
 *** Revisit both personal [[file:20210627154021-goals.org][goals]] and project goals [0/1]
 /Write about how I am or am not on track for the goals./
 - [ ] see Reflections below
-* Work Log\n
-#+BEGIN: clocktable :scope agenda :maxlevel 3 :tstart '<today-7>' :tend '<now>' :link t :fileskip0 t :hidefiles t :compact t :narrow 100
-#+END:
 * Reflections
 /What's on my mind? What went well and what didn't? What did I do that will prepare me for my long-term goals?/
-\n* Reflections"))
+\n"))
       ))
 
 (global-set-key (kbd "C-c j") #'org-roam-dailies-goto-today)
