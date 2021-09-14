@@ -6,13 +6,15 @@
         (sequence "BLOCKED(b)" "|" "DONE(f)")))
 
 (cond ((eq system-type 'windows-nt)
-       (setq org-directory "c:/Users/rache/Google Drive/Org")
+       (setq org-directory "G:/My Drive/Org")
        )
       ((eq system-type 'gnu/linux)
        (setq org-directory "~/org")       
        )
       )
-        
+
+(setq org-agenda-files '(concat (file-name-as-directory org-directory) (concat (file-name-as-directory "shared") "projects")))
+
 (global-set-key (kbd "C-c c") #'org-capture)
 (setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))
 
@@ -126,3 +128,5 @@ same directory as the org-buffer and insert a link to this file."
       :config
       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
  (setq org-bullets-bullet-list '("◉" "○" "•" "-"))
+
+(setq org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link nil :narrow 40! :indent t :formula nil :timestamp nil :level nil :tcolumns nil :formatter nil))

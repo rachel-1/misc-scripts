@@ -5,10 +5,10 @@
 
 ;; Org-ref
 ;; Set up bibliography
-(setq org-ref-default-bibliography '("C:/Users/rache/Google Drive/zotero.bib"))
-(setq bibtex-completion-bibliography "C:/Users/rache/Google Drive/zotero.bib")
+(setq org-ref-default-bibliography '("G:/My Drive/zotero.bib"))
+(setq bibtex-completion-bibliography "G:/My Drive/zotero.bib")
 ;(setq orb-insert-interface 'helm-bibtex)
-(global-set-key (kbd "<f6>") #'org-ref-helm-insert-cite-link)
+(global-set-key (kbd "<f8>") 'org-ref-helm-insert-cite-link)
 
 ;; Org-roam-bibtex
 (require `org-roam-bibtex)
@@ -20,28 +20,24 @@
 (pdf-tools-install)
 (use-package org-noter)
 
-; Setup with ORB
+; Setup with ORB (other setup done in org-roam)
 (setq orb-preformat-keywords
-   '(("citekey" . "=key=") "title" "url" "file" "author-or-editor" "keywords"))
+      '("citekey" "title" "url" "author-or-editor" "keywords" "file")
+      orb-process-file-keyword t
+      orb-file-field-extensions '("pdf"))
 
-(setq orb-templates
-      '(("r" "ref" plain (function org-roam-capture--get-point)
-         ""
-         :file-name "${citekey}"
-         :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+roam_tags: source
-
-- tags ::
-- keywords :: ${keywords}
-
-* ${title}
-:PROPERTIES:
-:Custom_ID: ${citekey}
-:URL: ${url}
-:AUTHOR: ${author-or-editor}
-:NOTER_DOCUMENT: ${file}
-:NOTER_PAGE:
-:END:")))
+;(add-to-list 'org-roam-capture-templates
+;      '(("r" "bibliography reference" plain
+;         (file "citation_template")
+;         :if-new
+;         (file+head "references/${citekey}.org" "#+title: ${title}\n"))))
 
 ;;; Open PDF file stored in Windows' standard Zotero storage
 (setq bibtex-completion-pdf-field "File")
 
+; Change what the link description will be in various text modes
+;(setq bibtex-completion-format-citation-functions
+;  '((org-mode      . bibtex-completion-format-citation-org-title-link-to-PDF)
+;    (latex-mode    . bibtex-completion-format-citation-cite)
+;    (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+;    (default       . bibtex-completion-format-citation-default)))
