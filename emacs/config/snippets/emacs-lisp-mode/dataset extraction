@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: dataset extraction
+# key: dataset extraction
+# --
+./perception/reportability/dataset_extraction/launch_extraction_default.sh

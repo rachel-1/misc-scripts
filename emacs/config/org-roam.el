@@ -41,13 +41,13 @@
          :unnarrowed t)
         ("z" "project" plain "%?"
          :if-new (file+head "shared/projects/${slug}.org"
-                            "#+title: ${title}\n\n")
+                            "#+STARTUP: content\n#+title: ${title}\n\n")
          :unnarrowed t)
         ("a" "aurora notes" plain "%?"
          :if-new (file+head "aurora/${slug}.org"
                             "#+title: ${title}\n#+file_tags: :aurora:\n")
          :unnarrowed t)
-        ("m" "aurora meeting" plain "* ${title} %t n\n%?"
+        ("m" "aurora meeting" plain "* ${title} %t\n%?"
          :if-new (file+head "aurora/meetings.org"
                             "#+title: Aurora Meetings\n#+filetags: :aurora:\n")
          :clock-in t :clock-resume t :kill-buffer t
@@ -109,37 +109,38 @@
     '(("d" "default" entry
     "* %?"
     :if-new (file+head "%<%Y-%m-%d>.org"
-                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n\n%?"))
-      ("w" "week" entry
+                       "#+title: %<%Y-%m-%d (%a)>\n#+roam_tags:journal\n\n"))
+      ("w" "week" plain
        "* %?"
-       :if-new (file+head "Week of %<%Y-%m-%d>.org"
-                          "#+title: Week of %<%Y-%m-%d>\n#+roam_tags:journal\n* Checklist
-** Get clear
-*** Process all inbound [0/4]
-- [ ] emails
+       :if-new (file+head "weekly_review_%<%Y-%m-%d>.org"
+                          "#+title: Week of %t\n#+roam_tags:journal\n
+
+* Preparation
+** Goals
+
+* Reflection: Get Clear
+** Process all inbound [0/5]
+- [ ] personal email
+- [ ] work email
 - [ ] texts
 - [ ] tabs
 - [ ] receipts
-*** Tidy up [0/2]
+** Tidy up [0/2]
 - [ ] desk
 - [ ] tasks
-*** Empty my head [0/1]
-  /Write whatever is on my mind: new projects, tasks, waiting-fors, goals, etc./
-  - [ ] see Reflections below
-** Get current
-*** Look over time spent [0/2]
-/Write what went well and what didn't./
-- [ ] ~org-roam-dailies-copy-week-of-entries~
-- [ ] see Reflections below
-*** Review upcoming events/tasks [0/2]
-- [ ] review events of the week ahead
-- [ ] remove/reprioritize old tasks
-*** Revisit both personal [[file:20210627154021-goals.org][goals]] and project goals [0/1]
-/Write about how I am or am not on track for the goals./
-- [ ] see Reflections below
-* Reflections
-/What's on my mind? What went well and what didn't? What did I do that will prepare me for my long-term goals?/
-\n"))
+** Empty my head [0/1]
+- [ ] Write whatever is on my mind: new projects, tasks, waiting-fors, goals, etc.
+
+* Reflection: Time Spent
+#+BEGIN: clocktable :scope agenda :maxlevel 2 :link t :fileskip0 t :compact t :narrow 50 :block thisweek
+#+END:
+
+#+begin_src elisp
+(org-roam-dailies-copy-week-of-entries)
+#+end_src
+
+* Reflection
+/What's on my mind? What went well and what didn't? What did I do that will prepare me for my  [[file:20210627154021-goals.org][goals]]?/ What can I add to my learnings (in files like [[id:fe7ecd3a-a174-42b6-b914-0f1aae38c550][Aurora Learnings (Meta)]])?"))
       ))
 
 (global-set-key (kbd "C-c j") #'org-roam-dailies-goto-today)

@@ -2,18 +2,17 @@
 ;(require 'org-inlinetask) TODO
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(d)" "|" "DONE(f)")
+      '((sequence "TODO(t)" "DOING(d)" "|" "DONE(f)" "ABANDONED(a)")
         (sequence "BLOCKED(b)" "|" "DONE(f)")))
 
 (cond ((eq system-type 'windows-nt)
        (setq org-directory "G:/My Drive/Org")
        )
       ((eq system-type 'gnu/linux)
-       (setq org-directory "~/org")       
+       (setq org-directory "~/org")
+       (setq org-agenda-files '("~/org/shared/projects/"))       
        )
       )
-
-(setq org-agenda-files '(concat (file-name-as-directory org-directory) (concat (file-name-as-directory "shared") "projects")))
 
 (global-set-key (kbd "C-c c") #'org-capture)
 (setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))
@@ -32,7 +31,7 @@
 ;; Allow quick insertion of certain templates
 (setq org-structure-template-alist
       '(("b" . "src bash\n")))
-(global-set-key (kbd "C-c ,") 'org-insert-structure-template)
+(global-set-key (kbd "C-x i") 'org-insert-structure-template)
 
 ;;; Take screenshots to insert:
 ; https://www.sastibe.de/2018/11/take-screenshots-straight-into-org-files-in-emacs-on-win10/
@@ -105,19 +104,28 @@ same directory as the org-buffer and insert a link to this file."
  )
 
 (global-set-key (kbd "C-c C-o") #'org-open-at-point)
+(global-set-key (kbd "C-x C-d") #'org-table-delete-column)
 (global-set-key (kbd "C-o") #'org-peek-link-at-point)
 
-(global-set-key (kbd "C-c C-x C-j") 'org-clock-goto)
+(bind-key* "C-c C-x C-j" 'org-clock-goto)
+(global-set-key (kbd "C-c i") #'org-clock-in)
+(bind-key* "C-c C-i" (lambda () (interactive) (let ((current-prefix-arg '(4))) (call-interactively #'org-clock-in))))
 
 ;; Set up pomodoro timer
 (use-package org-pomodoro)
 (setq org-pomodoro-format "Work~%s")
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 (setq org-pomodoro-manual-break t)
-(setq org-pomodoro-audio-player "mplayer")
-(setq org-pomodoro-finished-sound-args "-volume 0.3")
-(setq org-pomodoro-long-break-sound-args "-volume 0.3")
-(setq org-pomodoro-short-break-sound-args "-volume 0.3")
+(setq org-pomodoro-finished-sound-p nil)
+(setq org-pomodoro-long-break-sound-p nil)
+(setq org-pomodoro-overtime-sound-p nil)
+(setq org-pomodoro-short-break-sound-p nil)
+;; If you want to enable audio again, you will likely want to use commands like
+;; these to reduce the volume.
+;(setq org-pomodoro-audio-player "mplayer")
+;(setq org-pomodoro-finished-sound-args "-volume 0.3")
+;(setq org-pomodoro-long-break-sound-args "-volume 0.3")
+;(setq org-pomodoro-short-break-sound-args "-volume 0.3")
 (global-set-key (kbd "C-c C-p") #'org-pomodoro)
 
 ;; Don't round time durations to days.
@@ -130,3 +138,30 @@ same directory as the org-buffer and insert a link to this file."
  (setq org-bullets-bullet-list '("◉" "○" "•" "-"))
 
 (setq org-clocktable-defaults '(:maxlevel 2 :lang "en" :scope file :block nil :wstart 1 :mstart 1 :tstart nil :tend nil :step nil :stepskip0 nil :fileskip0 t :tags nil :match nil :emphasize nil :link nil :narrow 40! :indent t :formula nil :timestamp nil :level nil :tcolumns nil :formatter nil))
+
+;; Create global hotkeys to jump to certain bookmarks
+(bind-key* "C-j q" (lambda () (interactive) (bookmark-jump "questions")))
+(bind-key* "C-j i" (lambda () (interactive) (bookmark-jump "issuesets")))
+(bind-key* "C-j r" (lambda () (interactive) (bookmark-jump "reportability")))
+(bind-key* "C-j m" (lambda () (interactive) (bookmark-jump "mlab")))
+(bind-key* "C-j p" (lambda () (interactive) (bookmark-jump "process")))
+
+;; Allow bash execution of code blocks
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+    )
+)
+(setq org-confirm-babel-evaluate nil)
+
+(defun create-code-todo ()
+  (interactive)
+  (setq task-name (read-string "Enter name of task: "))
+  (insert (concat "* TODO " task-name))
+  (setq branch-name (downcase (replace-regexp-in-string " " "_" task-name)))
+  (insert (concat "\n#+begin_src bash\ngit checkout master && git pull\nbonsai branch "
+                  branch-name "\n#+end_src\n"))
+  (insert (concat "\n#+begin_src bash\ngit checkout " branch-name "\n#+end_src\n"))
+  )
+
+

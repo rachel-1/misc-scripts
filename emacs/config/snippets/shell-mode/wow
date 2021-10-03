@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: wow
+# key: wow
+# --
+wowza ${1:option}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: local dataset extraction
+# key: extract_snippet
+# --
+bazel run //perception/reportability/dataset_extraction:extract_dataset -- --snippet ${1:snippet} --local --amendment /tmp/amendment.txt --track_id ${2:track_id}

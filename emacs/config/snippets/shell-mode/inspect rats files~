@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: inspect rats files
+# key: inspect
+# --
+./bazel-bin/tensor/inspect_rats_files ${1:file}

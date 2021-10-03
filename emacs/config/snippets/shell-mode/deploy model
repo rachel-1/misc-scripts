@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: deploy model
+# key: deploy
+# --
+./perception/reportability/training/deploy_model.sh ${1:training_job}

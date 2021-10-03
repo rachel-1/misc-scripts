@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: train reportability
+# key: train
+# --
+./perception/reportability/training/launch_training_default.sh ${1:job_name} ${2:dataset}

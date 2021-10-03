@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: shuffle
+# key: shuffle
+# --
+./perception/dataset/shuffle.sh ${1:training_job}

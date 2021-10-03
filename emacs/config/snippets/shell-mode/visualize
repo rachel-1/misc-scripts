@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: visualize
+# key: vis
+# --
+bazel run //perception/tracker:visualize_track_vignettes -- "${1:log_id}"

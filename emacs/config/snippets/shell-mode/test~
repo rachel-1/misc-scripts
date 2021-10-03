@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: test
+# key: test
+# --
+testing ${1:item} 

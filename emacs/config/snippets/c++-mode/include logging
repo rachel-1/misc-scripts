@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: include logging
+# key: add_l
+# --
+#include "third_party/glog/logging.h"
