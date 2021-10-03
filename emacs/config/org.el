@@ -7,13 +7,14 @@
 
 (cond ((eq system-type 'windows-nt)
        (setq org-directory "G:/My Drive/Org")
+       (setq org-agenda-files '("G:/My Drive/Org/shared/projects"))
        )
       ((eq system-type 'gnu/linux)
        (setq org-directory "~/org")       
        )
       )
 
-(setq org-agenda-files '(concat (file-name-as-directory org-directory) (concat (file-name-as-directory "shared") "projects")))
+(setq org-refile-targets '((nil :maxlevel . 2)))
 
 (global-set-key (kbd "C-c c") #'org-capture)
 (setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))

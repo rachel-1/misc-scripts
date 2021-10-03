@@ -69,8 +69,8 @@
                             "#+title: ${title}\n")
          :unnarrowed t)
         ("e" "event" plain "%?"
-         :if-new (file+head "personal/<%<%Y-%m-%d>>_${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :event:\n")
+         :if-new (file+head "personal/%<%Y_%m_%d>_${slug}.org"
+                            "#+title: ${title} %t\n#+file_tags: :event:\n")
          :unnarrowed t)
         ("p" "person" plain "%?"
          :if-new (file+head "personal/${slug}.org"
