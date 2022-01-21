@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: print track info
+# key: track
+# --
+./bazel-bin/experimental/dking/tools/print_track_info ${1:log_uri}

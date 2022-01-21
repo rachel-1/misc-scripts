@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: calibrated timings
+# key: hil
+# --
+avhil run --recipe caltime-tracker --pull-request ${1:pr_number}

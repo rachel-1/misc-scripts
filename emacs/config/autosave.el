@@ -11,6 +11,8 @@
              (buffer-modified-p (current-buffer)))
     (save-buffer)))
 
+(defadvice ace-window (before save-buffer-now activate)
+  (prelude-auto-save-command))
 (defadvice switch-to-buffer (before save-buffer-now activate)
   (prelude-auto-save-command))
 (defadvice other-window (before other-window-now activate)
@@ -18,3 +20,5 @@
 (defadvice other-frame (before other-frame-now activate)
   (prelude-auto-save-command))
 
+(desktop-load-default)
+(desktop-read)

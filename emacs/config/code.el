@@ -39,11 +39,55 @@
   (shell-command "arc lint --apply-patches")
   )
 
-(global-set-key (kbd "C-;") 'lint)
+(global-set-key (kbd "C-c ;") 'lint)
 
 ; Use Magit to have a UI for Git
 (use-package magit)
 
+(defun magit-status-av-repo ()
+  "Magit status, but with repo hard-coded so it works from anywhere."
+  (interactive)
+  (magit-status "~/av")
+)
+(global-set-key (kbd "C-x g") 'magit-status-av-repo)
+
+(defun magit-status-av-worktree-repo ()
+  "Magit status, but with repo hard-coded so it works from anywhere."
+  (interactive)
+  (magit-status "~/av/worktree")
+)
+(global-set-key (kbd "C-x w") 'magit-status-av-worktree-repo)
+
+; Define a hydra for smerge because it has stupid default keybindings.
+(defhydra hydra-smerge (:color red :hint nil
+:pre (smerge-mode 1))
+"
+^Move^ ^Keep^ ^Diff^ ^Pair^
+------------------------------------------------------
+_n_ext _b_ase _R_efine _<_: base-mine
+_p_rev _m_ine _E_diff _=_: mine-other
+^ ^ _o_ther _C_ombine _>_: base-other
+^ ^ _a_ll _r_esolve
+_q_uit _RET_: current
+"
+("RET" smerge-keep-current)
+("C" smerge-combine-with-next)
+("E" smerge-ediff)
+("R" smerge-refine)
+("a" smerge-keep-all)
+("b" smerge-keep-base)
+("m" smerge-keep-mine)
+("n" smerge-next)
+("o" smerge-keep-other)
+("p" smerge-prev)
+("r" smerge-resolve)
+("<" smerge-diff-base-mine)
+("=" smerge-diff-mine-other)
+(">" smerge-diff-base-other)
+("q" nil :color blue))
+
+(global-set-key (kbd "C-c C-m") 'hydra-smerge/body)
+        
 ;; Taken from https://www.emacswiki.org/emacs/IndentRigidlyN
 ;; (originally by KragenJavierSitaker)
 (defun indent-rigidly-n (n)
@@ -149,3 +193,12 @@
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 ; Use a helm wrapper for xref.
 (use-package helm-xref)        
+
+
+(use-package multiple-cursors)
+(global-set-key (kbd "M-RET") 'mc/edit-lines)
+
+(global-set-key (kbd "M-o") 'ace-window)
+(setq aw-scope 'frame)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+

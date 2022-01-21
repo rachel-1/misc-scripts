@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: stack run
+# key: stack_run
+# --
+./bazel-bin/common/framework/stack_run config/perception/tracker.stack --logtostderr --fetch_assets --fetch_atlas --in.log_id "${1:log_id}" --in.cloud_read --offline --host_platform config/dev/dev.platform --logger

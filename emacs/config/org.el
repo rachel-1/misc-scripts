@@ -1,6 +1,7 @@
 ;;; Inline tasks
 ;(require 'org-inlinetask) TODO
 
+(setq org-priority-default ?C)
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(d)" "|" "DONE(f)" "ABANDONED(a)")
         (sequence "BLOCKED(b)" "|" "DONE(f)")))
@@ -15,7 +16,9 @@
        )
       )
 
-(setq org-refile-targets '((nil :maxlevel . 2)))
+; Bind org-agenda to C-1
+
+(setq org-refile-targets '((nil :maxlevel . 1)))
 
 (global-set-key (kbd "C-c c") #'org-capture)
 (setq org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org"))
@@ -25,6 +28,9 @@
 (setq deft-extensions '("org"))
 (setq deft-directory org-directory)
 (setq deft-recursive t)
+
+(setq org-tag-alist '(("review_feedback" . ?r) ("pr" . ?p) ("learning" . ?l)))
+
 
 ;; Allow copy-paste to Slack
 (use-package ox-slack)
@@ -168,3 +174,19 @@ same directory as the org-buffer and insert a link to this file."
   )
 
 
+(defun checkout-branch ()
+  (interactive)
+  (org-previous-visible-heading 1)
+  (setq branch (org-element-property :BRANCH (org-element-at-point)))
+  (message "branch is %s" branch)
+  (shell-command (concat "cd ~/av && git checkout " branch))
+)
+
+
+(defun org-archive-done (&optional arg)
+  (org-todo 'done))
+
+(advice-add 'org-archive-subtree :before 'org-archive-done)
+(bind-key* "C-c >" (lambda () (interactive) (org-demote-subtree)))
+
+(global-set-key (kbd "C-c l") #'org-store-link)
