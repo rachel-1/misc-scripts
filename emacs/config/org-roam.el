@@ -45,7 +45,7 @@
          :unnarrowed t)
         ("a" "aurora notes" plain "%?"
          :if-new (file+head "aurora/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :aurora:\n")
+                            "#+title: ${title}\n#+filetags: :aurora:\n")
          :unnarrowed t)
         ("m" "aurora meeting" plain "* ${title} %t\n%?"
          :if-new (file+head "aurora/meetings.org"
@@ -54,15 +54,15 @@
          )        
         ("i" "introspection" plain "%?"
          :if-new (file+head "personal/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :introspection:\n")
+                            "#+title: ${title}\n#+filetags: :introspection:\n")
          :unnarrowed t)
         ("b" "book" plain "%?"
          :if-new (file+head "personal/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :book:\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n")
+                            "#+title: ${title}\n#+filetags: :book:\n:PROPERTIES:\n:DATE: %t\n:END:\n[rating] [genre] ([format]) from [recommender]\n\n* Review\n\n* Purpose\n\n* Main Ideas\n* Reflections\n* Action Items\n")
          :unnarrowed t)
         ("t" "task" plain "%?"
          :if-new (file+head "shared/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :task:\n")
+                            "#+title: ${title}\n#+filetags: :task:\n")
          :unnarrowed t)
         ("s" "shared" plain "%?"
          :if-new (file+head "shared/${slug}.org"
@@ -70,19 +70,19 @@
          :unnarrowed t)
         ("e" "event" plain "%?"
          :if-new (file+head "personal/%<%Y_%m_%d>_${slug}.org"
-                            "#+title: ${title} %t\n#+file_tags: :event:\n")
+                            "#+title: ${title} %t\n#+filetags: :event:\n")
          :unnarrowed t)
         ("p" "person" plain "%?"
          :if-new (file+head "personal/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :person:\n")
+                            "#+title: ${title}\n#+filetags: :person:\n")
          :unnarrowed t)
         ("l" "location" plain "%?"
          :if-new (file+head "personal/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :location:\n")
+                            "#+title: ${title}\n#+filetags: :location:\n")
          :unnarrowed t)
         ("c" "company" plain "%?"
          :if-new (file+head "personal/${slug}.org"
-                            "#+title: ${title}\n#+file_tags: :company:\n")
+                            "#+title: ${title}\n#+filetags: :company:\n")
          :unnarrowed t)
         ("r" "bibliography reference" plain
          "- tags ::
