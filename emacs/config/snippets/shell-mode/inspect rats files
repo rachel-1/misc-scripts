@@ -2,4 +2,4 @@
 # name: inspect rats files
 # key: inspect
 # --
-./bazel-bin/tensor/inspect_rats_files ${1:file} --view track/uri --view label/maybe_articulated --view is_reportable --view track/id --view label/fused_articulated --tsv | sort -u -k4 | tee >(./bazel-bin/perception/tracker/visualize_track_vignettes -)
+./bazel-bin/tensor/inspect_rats_files ${1:file} --view track/uri --view is_reportable --view track/id --tsv | sort -u -k4 | tee >(./bazel-bin/perception/tracker/visualize_track_vignettes -)
