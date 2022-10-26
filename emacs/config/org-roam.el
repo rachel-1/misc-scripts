@@ -121,20 +121,7 @@
 * Preparation
 ** Goals
 
-* Reflection: Get Clear
-** Process all inbound [0/5]
-- [ ] personal email
-- [ ] work email
-- [ ] texts
-- [ ] tabs
-- [ ] receipts
-** Tidy up [0/2]
-- [ ] desk
-- [ ] tasks
-** Empty my head [0/1]
-- [ ] Write whatever is on my mind: new projects, tasks, waiting-fors, goals, etc.
-
-* Reflection: Time Spent
+* Time Spent
 #+BEGIN: clocktable :scope agenda :maxlevel 2 :link t :fileskip0 t :compact t :narrow 50 :block thisweek
 #+END:
 
@@ -143,7 +130,7 @@
 #+end_src
 
 * Reflection
-/What's on my mind? What went well and what didn't? What did I do that will prepare me for my  [[file:20210627154021-goals.org][goals]]?/ What can I add to my learnings (in files like [[id:fe7ecd3a-a174-42b6-b914-0f1aae38c550][Aurora Learnings (Meta)]])?"))
+/What's on my mind? What went well and what didn't? What did I do that will prepare me for my [[file:20210627154021-goals.org][goals]]? What can I add to my learnings (in files like [[id:fe7ecd3a-a174-42b6-b914-0f1aae38c550][Aurora Learnings (Meta)]])?/"))
       ))
 
 (global-set-key (kbd "C-c j") #'org-roam-dailies-goto-today)

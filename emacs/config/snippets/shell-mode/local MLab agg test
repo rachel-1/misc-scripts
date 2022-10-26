@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: local MLab agg test
+# key: mlab
+# --
+bazel run //perception/evaluation/mlab/mlib:runner -- -c perception/evaluation/mlab/mlib/configs/pr.yaml

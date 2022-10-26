@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: visualized track vignette
+# key: viz
+# --
+./bazel-bin/perception/tracker/visualize_track_vignettes "{$1:logid}"

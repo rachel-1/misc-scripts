@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: metrics notebook
+# key: metrics_nb
+# --
+bazel run //perception/reportability/metrics:notebook_analysis_notebook
