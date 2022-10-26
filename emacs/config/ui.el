@@ -13,6 +13,7 @@
 (tooltip-mode  0)
 (scroll-bar-mode 0)
 (menu-bar-mode 0) ;menu bar is explicitly turned on for beginners. Change the value to 0.
+(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
 
 ;; Optional aditional aesthetic changes
 ;; Adapted from `elegance.el' in Elegant Emacs by Nicolas P. Rougier (rougier)
@@ -32,7 +33,7 @@
            (lambda ()
             (variable-pitch-mode 1)))
 
-(set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 130)
+(set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 200)
 (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
 (set-face-attribute 'variable-pitch nil :family "Constantia")
 

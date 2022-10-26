@@ -59,6 +59,7 @@
 (global-set-key (kbd "C-x w") 'magit-status-av-worktree-repo)
 
 ; Define a hydra for smerge because it has stupid default keybindings.
+(use-package hydra) 
 (defhydra hydra-smerge (:color red :hint nil
 :pre (smerge-mode 1))
 "

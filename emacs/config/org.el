@@ -10,7 +10,7 @@
        (setq org-directory "G:/My Drive/Org")
        (setq org-agenda-files '("G:/My Drive/Org/shared/projects"))
        )
-      ((eq system-type 'gnu/linux)
+        ((or (eq system-type 'gnu/linux) (eq system-type 'darwin))
        (setq org-directory "~/org")
        (setq org-agenda-files '("~/org/shared/projects/"))       
        )
@@ -31,6 +31,26 @@
 
 (setq org-tag-alist '(("review_feedback" . ?r) ("pr" . ?p) ("learning" . ?l)))
 
+;; Allow quick insertion of certain templates
+(setq org-structure-template-alist
+      '(("b" . "src bash\n")))
+(global-set-key (kbd "C-x i") 'org-insert-structure-template)
+(setq org-capture-templates
+      '(("r" "Reportability Todo" entry (file "~/org/shared/projects/retrain_reportability.org")
+         "* TODO %?\n  %i\n")
+        ("m" "MLab Todo" entry (file "~/org/shared/projects/mlab.org")
+         "* TODO %?\n  %i\n")
+        ("*" "Meta Todo" entry (file "~/org/shared/projects/aurora_meta.org")
+         "* TODO %?\n  %i\n")))
+
+(define-key global-map (kbd "C-c r")
+  (lambda () (interactive) (org-capture nil "r")))
+(define-key global-map (kbd "C-c m")
+  (lambda () (interactive) (org-capture nil "m")))
+(define-key global-map (kbd "C-c *")
+  (lambda () (interactive) (org-capture nil "*")))
+
+(global-set-key (kbd "C-c c") #'org-capture)
 
 ;; Allow copy-paste to Slack
 (use-package ox-slack)

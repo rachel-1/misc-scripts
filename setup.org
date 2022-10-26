@@ -1,5 +1,6 @@
 # A list of system set-up commands I always forget.
-
+* Mac
+https://www.switchingtomac.com/tutorials/how-to-permanently-stop-dock-icons-from-bouncing/
 * Emacs
 ** Install Emacs27 on Ubuntu 18
 sudo add-apt-repository ppa:kelleyk/emacs
