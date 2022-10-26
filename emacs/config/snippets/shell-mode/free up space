@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: free up space
+# key: free
+# --
+sudo ./tools/free_up_disk_space.py

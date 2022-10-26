@@ -13,6 +13,11 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(require 'desktop+)
+(server-mode)
+(global-set-key (kbd "C-x C-c") #'save-buffers-kill-emacs)
+;(desktop+-load "Aurora")
+
 (load "~/.emacs.d/config/ssh.el")
 (if (load "~/.emacs.d/config/org.el")
     (load "~/.emacs.d/config/org-roam.el"))
@@ -41,7 +46,9 @@
  '(org-agenda-files
    '("~/org/aurora/meetings.org" "/home/rgardner/org/shared/projects/aurora_documentation.org" "/home/rgardner/org/shared/projects/aurora_meta.org" "/home/rgardner/org/shared/projects/creating_issuesets.org" "/home/rgardner/org/shared/projects/mlab.org" "/home/rgardner/org/shared/projects/process.org" "/home/rgardner/org/shared/projects/retrain_reportability.org" "/home/rgardner/org/shared/projects/s2a_attention.org"))
  '(package-selected-packages
-   '(ace-window cl-lib multiple-cursors auto-complete yasnippet yasnippets org-ref ox-clip helm-xref dumb-jump helm-projectile projectile clipetty org-cliplink org-attach-screenshot ox-slack magit org-roam helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel))
+   '(boon delight desktop+ ace-window cl-lib multiple-cursors auto-complete yasnippet yasnippets org-ref ox-clip helm-xref dumb-jump helm-projectile projectile clipetty org-cliplink org-attach-screenshot ox-slack magit org-roam helm-ispell helm-flyspell org-pomodoro deft use-package poet-theme org-roam-bibtex org-noter-pdftools org-bullets olivetti ewal-spacemacs-themes emacsql-sqlite counsel))
+ '(projectile-mode nil nil (projectile))
+ '(read-buffer-completion-ignore-case t)
  '(safe-local-variable-values
    '((flycheck-clang-warnings "all" "extra" "no-pragma-once-outside-header")
      (flycheck-clang-language-standard . "c++17")

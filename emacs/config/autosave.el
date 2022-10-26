@@ -20,5 +20,5 @@
 (defadvice other-frame (before other-frame-now activate)
   (prelude-auto-save-command))
 
-(desktop-load-default)
-(desktop-read)
+(desktop-save-mode 1)
+

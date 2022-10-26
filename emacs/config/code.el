@@ -6,13 +6,21 @@
 
 (global-set-key (kbd "C-x C-p") 'skel-python-print)
 
+(defun add-breakpoint ()
+  (interactive)
+  (indent-for-tab-command)
+  (insert "import pdb; pdb.set_trace()")
+  (boon-newline-dwim)
+)
+
 (define-skeleton skel-c++-print
   "Insert a C++ print statement"
   "Type name of variable: "
-  "LOG(INFO) << \"" str ": \" << "str"; // TODO(rachel-1) - remove debug statement"_)
+  "std::cout << \"" str ": \" << "str" << std::endl; // TODO(rachel-1) - remove debug statement"_)
 
 (require 'cc-mode)
 (define-key c++-mode-map (kbd "C-x C-p") 'skel-c++-print)
+
 
 ;; TODO: python mode doesn't work?
 ;;(require 'python-mode)
@@ -44,6 +52,7 @@
 ; Use Magit to have a UI for Git
 (use-package magit)
 
+(setq pop-up-windows nil)
 (defun magit-status-av-repo ()
   "Magit status, but with repo hard-coded so it works from anywhere."
   (interactive)
@@ -51,12 +60,35 @@
 )
 (global-set-key (kbd "C-x g") 'magit-status-av-repo)
 
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-status-headers)
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-pushremote)
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-pushremote)
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-unpulled-from-upstream)
+;  (remove-hook 'magit-status-sections-hook 'magit-insert-unpushed-to-upstream-or-recent)
+
 (defun magit-status-av-worktree-repo ()
   "Magit status, but with repo hard-coded so it works from anywhere."
   (interactive)
-  (magit-status "~/av/worktree")
+  (magit-status "~/worktree")
 )
 (global-set-key (kbd "C-x w") 'magit-status-av-worktree-repo)
+
+(defun is-worktree ()
+  (unless (not
+(string-match-p (regexp-quote "av|worktree") (buffer-file-name)))
+(error "Invalid path"))
+ (string-match-p (regexp-quote "worktree") (buffer-file-name)))
+  
+(defun toggle-between-repo-and-worktree ()
+  "Switch a buffer between ~/av/file and ~/worktree/file."
+  (interactive)
+    (if (is-worktree)
+        (find-file (replace-regexp-in-string "worktree" "av" (buffer-file-name)))
+        (find-file (replace-regexp-in-string "av" "worktree" (buffer-file-name)))
+    )
+  )
+(global-set-key (kbd "C-x C-o") 'toggle-between-repo-and-worktree)
 
 ; Define a hydra for smerge because it has stupid default keybindings.
 (defhydra hydra-smerge (:color red :hint nil
@@ -114,8 +146,11 @@ _q_uit _RET_: current
 ; Make sure TRAMP always uses bash
 (setq explicit-shell-file-name "/bin/bash")
 
+;; Ignore duplicates when searching through history.
+(setq comint-input-ignoredups t)
+
 ; Create a new shell, incrementing the number each time.
-(defun new-shell ()
+(defun new-shell (&optional directory)
   (interactive)
 
   (let (
@@ -123,17 +158,41 @@ _q_uit _RET_: current
         (newbuf     (generate-new-buffer-name "*shell*"))
 	)
 
+    (let ((default-directory directory))
     (generate-new-buffer newbuf)
+    )
     (set-window-dedicated-p currentbuf nil)
     (set-window-buffer currentbuf newbuf)
     (shell newbuf)
+    (if directory
+    (with-current-buffer newbuf
+    (shell-cd directory))
+    ()) 
     )
   )
 
 (global-set-key (kbd "C-t") nil) ;; Remove twiddle
 (global-set-key (kbd "C-t") 'new-shell)
-
-
+(setq kill-buffer-query-functions (delq 'process-kill-buffer-query-function kill-buffer-query-functions))
+(kill-matching-buffers "\*shell\*.*" nil t)
+(new-shell "~/av")
+(new-shell "~/worktree")
+(new-shell "~/av")
+(new-shell "~/worktree")
+(defun get-shell ()
+    (interactive)
+    (if (is-worktree)
+        (switch-to-buffer-other-window "*shell*<2>")
+        (switch-to-buffer-other-window "*shell*")
+        )
+        )
+(defun get-shell-two ()
+    (interactive)
+    (if (is-worktree)
+        (switch-to-buffer-other-window "*shell*<4>")
+        (switch-to-buffer-other-window "*shell*<3>")
+        )
+        )
 
 (defun re-run-in-shell ()
   "Re-run last command in shell."
@@ -141,11 +200,13 @@ _q_uit _RET_: current
   (save-some-buffers 1)
   (if (get-buffer-window "*shell*" 'visible)
        (with-current-buffer (get-buffer-create "*shell*")
+       (end-of-buffer)
        (insert (comint-previous-input-string 0))
        (comint-send-input))
        (progn (pop-to-buffer "*shell*")
        (insert (comint-previous-input-string 0))
        (comint-send-input))
+       (recenter-top-bottom)
   )
 )
 
@@ -155,6 +216,7 @@ _q_uit _RET_: current
   (save-some-buffers 1)
   (if (get-buffer-window "*shell*<2>" 'visible)
        (with-current-buffer (get-buffer-create "*shell*<2>")
+       (end-of-buffer)
        (insert (comint-previous-input-string 0))
        (comint-send-input))
        (progn (pop-to-buffer "*shell*<2>")
@@ -163,8 +225,41 @@ _q_uit _RET_: current
   )
 )
 
-(global-set-key (kbd "<f6>") 're-run-in-shell)
-(global-set-key (kbd "<f7>") 're-run-in-shell-2)
+(defun magit-status-av-repo ()
+  "Magit status, but with repo hard-coded so it works from anywhere."
+  (interactive)
+  (magit-status "~/av")
+)
+
+;(defun magit-smart-status ()
+;    (if (string-match-p (regexp-quote "worktree") (buffer-file-name))
+
+(defun magit-rebase-on-master ()
+  (interactive)
+  (magit-fetch-refspec "origin" "master:master" "")
+  (magit-rebase-onto-upstream nil)
+)
+
+(defun magit-stage-and-commit ()
+  (interactive)
+  (magit-stage-modified t)
+  (magit-commit-create)
+  )
+
+(global-set-key (kbd "<f6>") (lambda() (interactive) (switch-to-buffer-other-window "*shell*")))
+(global-set-key (kbd "C-<f6>") 're-run-in-shell)
+(global-set-key (kbd "<f7>") (lambda() (interactive) (switch-to-buffer-other-window "*shell*<2>")))
+(global-set-key (kbd "C-<f7>") 're-run-in-shell-2)
+
+(require 'boon-qwerty)
+(add-hook 'prog-mode-hook 'turn-on-boon-mode)
+(global-set-key (kbd "C-v") 'boon-set-command-state)
+(define-key boon-command-map "H" 'projectile-find-other-file)
+(define-key boon-command-map "F" 'counsel-yank-pop)
+(define-key boon-command-map "c" 'recenter-top-bottom)
+(define-key boon-command-map "" 'boon-newline-dwim)
+(define-key boon-command-map "r" 'swiper)
+(define-key boon-command-map "e" 'add-breakpoint)
 
 ; Make sure programs executed from the shell use the current Emacs as editor.
 ; This is most important for Git, which is why `with-editor ships with Magit.
@@ -185,8 +280,31 @@ _q_uit _RET_: current
     :run "bazel run "
     :test-prefix "test_"
     :test-suffix "_test")
+    :delight
     )
+; Turn off mode line
+;(setq projectile-mode-line-prefix "")
+    ;(eval-after-load "helm-projectile"
+;'(setq projectile-mode-line "TEST")
+;)
 
+(add-hook 'compilation-mode-hook (lambda () (local-set-key (kbd "n") 'compilation-next-error)
+                                            (local-set-key (kbd "p") 'compilation-previous-error)
+                                            (local-set-key (kbd "o") 'compilation-next-error)
+                                            (local-set-key (kbd "i") 'compilation-previous-error)
+                                            (local-set-key (kbd "x o") 'other-window)
+                                            (local-set-key (kbd "x 2") 'split-window-below)
+                                            (local-set-key (kbd "x b") 'ivy-switch-buffer)
+                                            (local-set-key (kbd "l") 'recenter-top-bottom)
+                                 )
+)
+
+; Scroll with cursor in the center of the screen
+;(setq maximum-scroll-margin 0.5
+;      scroll-margin 99999
+;      scroll-preserve-screen-position t
+;      scroll-conservatively 0)
+    
 ; Support for jump-to-definition
 ; By default uses M-. to jump to definition.
 (use-package dumb-jump)
@@ -202,3 +320,20 @@ _q_uit _RET_: current
 (setq aw-scope 'frame)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
+; MAGIC from https://github.com/magit/magit/issues/2541
+(setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer
+         buffer
+         (cond ((and (derived-mode-p 'magit-mode)
+                     (eq (with-current-buffer buffer major-mode)
+                         'magit-status-mode))
+                nil)
+               ((memq (with-current-buffer buffer major-mode)
+                      '(magit-process-mode
+                        magit-revision-mode
+                        magit-diff-mode
+                        magit-stash-mode))
+                nil)
+               (t
+                '(display-buffer-same-window))))))

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: amend log
+# key: amend
+# --
+bazel run //tools:amend_log -- --log_id ${1:log_id} tracker -b 1

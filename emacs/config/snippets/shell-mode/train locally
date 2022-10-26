@@ -1,9 +1,9 @@
 # -*- mode: snippet -*-
-# name: local training
+# name: train locally
 # key: train_local
 # --
 RATS_LIMIT=400 bazel run //perception/reportability/training:train \
     -- \
     --default.dataset ${1:dataset} \
-    --batch_size 32                \
+    --batch_size 32                     \
     --log_secs 1

@@ -1,10 +1,15 @@
 ;;; Inline tasks
 ;(require 'org-inlinetask) TODO
 
-(setq org-priority-default ?C)
+(setq   org-highest-priority ?A
+        org-default-priority ?C
+        org-lowest-priority ?D
+)
+
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(d)" "|" "DONE(f)" "ABANDONED(a)")
-        (sequence "BLOCKED(b)" "|" "DONE(f)")))
+        (sequence "BLOCKED(b)" "|" "DONE(f)")
+        ))
 
 (cond ((eq system-type 'windows-nt)
        (setq org-directory "G:/My Drive/Org")
@@ -16,7 +21,17 @@
        )
       )
 
-; Bind org-agenda to C-1
+(setq org-agenda-custom-commands
+      '(("w" "Work tasks"
+         ((tags-todo "aurora")))
+        ))
+
+(defun org-agenda-show-work-tasks (&optional arg)
+  (interactive "P")
+  (setq org-agenda-hide-tags-regexp (regexp-opt '("project" "aurora")))
+  (org-agenda arg "w"))
+(global-set-key (kbd "C-c a") 'org-agenda-show-work-tasks)
+
 
 (setq org-refile-targets '((nil :maxlevel . 1)))
 
@@ -120,6 +135,10 @@ same directory as the org-buffer and insert a link to this file."
 (global-set-key (kbd "C-c i") #'org-clock-in)
 (bind-key* "C-c C-i" (lambda () (interactive) (let ((current-prefix-arg '(4))) (call-interactively #'org-clock-in))))
 
+;; Keep clock history between restarts. This lets us C-c C-i to clock into interrupted tasks.
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+
 ;; Set up pomodoro timer
 (use-package org-pomodoro)
 (setq org-pomodoro-format "Work~%s")
@@ -166,13 +185,22 @@ same directory as the org-buffer and insert a link to this file."
 (defun create-code-todo ()
   (interactive)
   (setq task-name (read-string "Enter name of task: "))
-  (insert (concat "* TODO " task-name))
-  (setq branch-name (downcase (replace-regexp-in-string " " "_" task-name)))
-  (insert (concat "\n#+begin_src bash\ngit checkout master && git pull\nbonsai branch "
-                  branch-name "\n#+end_src\n"))
-  (insert (concat "\n#+begin_src bash\ngit checkout " branch-name "\n#+end_src\n"))
+  (insert (concat "* TODO " task-name "\n"))
+  (setq branch-name (concat "rachel-1/" (downcase (replace-regexp-in-string " " "_" task-name))))
+  (insert (concat ":PROPERTIES:\n:BRANCH: " branch-name "\n"))
+  (insert (concat ":PR: N/A\n:END:\n"))
+  (setq current-buf (current-buffer))
+  (if (= (length (window-list)) 1) (split-window-below))
+  (other-window 1)
+  (switch-to-buffer current-buf)
+  (magit-status-av-repo)
+  (if (y-or-n-p (concat "Create branch " branch-name " off master?"))
+      (magit-branch-and-checkout branch-name "master")
+      (kill-new branch-name)
+      )
   )
 
+(bind-key* "C-c C-x C-c" (lambda () (interactive) (create-code-todo)))
 
 (defun checkout-branch ()
   (interactive)
@@ -182,6 +210,13 @@ same directory as the org-buffer and insert a link to this file."
   (shell-command (concat "cd ~/av && git checkout " branch))
 )
 
+(defun show-pr-link ()
+  (interactive)
+  (org-previous-visible-heading 1)
+  (setq pr-link (org-element-property :PR (org-element-at-point)))
+  (kill-new pr-link)
+  (message pr-link)
+)
 
 (defun org-archive-done (&optional arg)
   (org-todo 'done))

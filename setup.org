@@ -14,6 +14,10 @@ sudo apt-get remove ^emacs24
 sudo apt install emacs
 curl -L https://git.io/epre | sh
 
+** Connect client
+#+begin_src bash
+emacsclient --socket-name /run/user/1001/emacs/server -c
+#+end_src
 ** Link customizations
 cd ~/.emacs.d/personal/preload
 ln -s ~/misc-scripts/config.el config.el
@@ -44,6 +48,8 @@ git commit --reuse-message=HEAD@{1}
 git submodule update --init --recursive
 ** Set email
 git config --global user.email "13966854+rachel-1@users.noreply.github.com"
+** Set up notifications
+https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-your-membership-in-organizations/managing-your-scheduled-reminders
 * Conda
 ** Create new environment 
 conda create --name py35 python=3.5

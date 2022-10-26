@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: tensorboard
+# key: tensorboard
+# --
+run_tensorboard_on_training_job ${1:job}

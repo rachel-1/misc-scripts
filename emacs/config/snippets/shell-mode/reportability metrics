@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: reportability metrics
-# key: note
+# key: metrics
 # --
-bazel run perception/reportability/metrics:notebook_report_notebook
+bazel run //perception/reportability/metrics:run_metrics -- --base_model ${1:base_model}

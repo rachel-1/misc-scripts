@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: publish
+# key: pub
+# --
+bonsai publish --draft
