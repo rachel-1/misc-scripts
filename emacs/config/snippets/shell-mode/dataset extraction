@@ -2,4 +2,4 @@
 # name: dataset extraction
 # key: launch_extraction
 # --
-./perception/reportability/dataset_extraction/launch_extraction_default.sh
+./perception/s2a/dataset_extraction/launch_extraction_image_model.sh

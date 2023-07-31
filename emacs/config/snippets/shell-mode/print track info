@@ -2,4 +2,4 @@
 # name: print track info
 # key: track
 # --
-./bazel-bin/experimental/rgardner/tools/print_track_info ${1:log_uri}
+bazel run //perception/tracker:print_track_info ${1:log_uri}

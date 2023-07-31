@@ -222,6 +222,15 @@ same directory as the org-buffer and insert a link to this file."
 
 (bind-key* "C-c C-x C-c" (lambda () (interactive) (create-code-todo)))
 
+(defun create-branch ()
+  (interactive)
+  (setq task-name (read-string "Enter name of task: "))
+  (setq branch-name (concat "rachel-1/" (downcase (replace-regexp-in-string " " "_" task-name))))
+  (magit-status-av-repo)
+  (magit-branch-and-checkout branch-name "master")
+  (kill-new branch-name)
+)  
+
 (defun checkout-branch ()
   (interactive)
   (org-previous-visible-heading 1)
