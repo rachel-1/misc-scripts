@@ -1,0 +1,35 @@
+{
+    "printStatement": {
+      "definitions": [
+        {
+          "scope": {
+            "langIds": [
+              "cpp"
+            ]
+          },
+          "body": [
+            "std::cout << \"$variable: \" << $variable << std::endl;"
+          ]
+        },
+        {
+          "scope": {
+            "langIds": [
+              "python"
+            ]
+          },
+          "body": [
+            "print(f\"$variable: {$variable}\")"
+          ]
+        }
+      ],
+      "description": "Print statement",
+      "variables": {
+        "variable": {
+          "wrapperScopeType": "token"
+        }
+      },
+      "insertionScopeTypes": [
+        "statement"
+      ]
+    }
+  }
