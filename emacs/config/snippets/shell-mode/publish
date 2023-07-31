@@ -2,4 +2,4 @@
 # name: publish
 # key: pub
 # --
-bonsai publish --draft
+bonsai publish --draft --no-validation

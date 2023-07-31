@@ -2,4 +2,4 @@
 # name: visualize
 # key: vis
 # --
-./bazel-bin/perception/tracker/visualize_track_vignettes -- "${1:log_id}"/perception metrics --pipeline tracker_duplicate
+bazel run //perception/tracker/vignette:visualize_track_vignettes -- "${1:log_id}"

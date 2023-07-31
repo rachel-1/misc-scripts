@@ -51,6 +51,7 @@
 
 ; Use Magit to have a UI for Git
 (use-package magit)
+(setq magit-list-refs-sortby "-creatordate")
 
 (setq pop-up-windows nil)
 (defun magit-status-av-repo ()
@@ -143,6 +144,12 @@ _q_uit _RET_: current
 (global-set-key (kbd "C-x <") 'outdent-rigidly-4)
 (global-set-key (kbd "C-x >") 'indent-rigidly-4)
 
+(modify-syntax-entry ?- "w" shell-mode-syntax-table)
+(modify-syntax-entry ?. "w" shell-mode-syntax-table)
+(modify-syntax-entry ?_ "w" shell-mode-syntax-table)
+(modify-syntax-entry ?: "w" shell-mode-syntax-table)
+(modify-syntax-entry ?/ "w" shell-mode-syntax-table)
+
 ; Make sure TRAMP always uses bash
 (setq explicit-shell-file-name "/bin/bash")
 
@@ -164,6 +171,7 @@ _q_uit _RET_: current
     (set-window-dedicated-p currentbuf nil)
     (set-window-buffer currentbuf newbuf)
     (shell newbuf)
+    (whitespace-newline-mode)
     (if directory
     (with-current-buffer newbuf
     (shell-cd directory))

@@ -2,4 +2,4 @@
 # name: local dataset extraction
 # key: extract_snippet
 # --
-bazel run //perception/reportability/dataset_extraction:extract_dataset -- --snippet ${1:snippet} --local --amendment s3://perception-prod-experiments/amendments/snippet_keys_to_amended_log_ids__2022-01-06_22.13.08__storm-perfect-aurora-samba__config-perception-tracker_with_inputs.stack.txt
+bazel run //perception/s2a/dataset_extraction:extract_dataset -- --snippet ${1:snippet} --local --amendment s3://perception-prod-experiments/amendments/snippet_keys_to_amended_log_ids__2022-01-06_22.13.08__storm-perfect-aurora-samba__config-perception-tracker_with_inputs.stack.txt

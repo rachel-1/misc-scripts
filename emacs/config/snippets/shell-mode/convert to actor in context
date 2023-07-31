@@ -2,4 +2,4 @@
 # name: convert to actor in context
 # key: aic
 # --
-./bazel-bin/perception/s2a/actor_trajectory_analysis/extract_actor_in_context "${1:logid}"
+bazel build //perception/actor_analysis:extract_actor_in_context && ./bazel-bin/perception/actor_analysis/extract_actor_in_context ${1:logid}

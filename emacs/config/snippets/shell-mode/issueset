@@ -2,4 +2,4 @@
 # name: issueset
 # key: --issue
 # --
---issueset rachel-uls-curated-bad-labels-found-by-trc --use_issue_bounds --pad_bounds 200ms
+--issueset rgardner-fisheye-missing-labels-$(date +%y%m%d) --use_issue_bounds --pad_bounds 200ms
